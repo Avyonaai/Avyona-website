@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Avyona Chat - Emotional AI</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #f5f5f5;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      transition: background 1s;
+    }
+    #chatbox {
+      width: 80%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      padding: 20px;
+      border-radius: 15px;
+      overflow-y: auto;
+      height: 400px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      transition: box-shadow 1s;
+    }
+    #userInput {
+      width: 70%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      margin-right: 5px;
+    }
+    #sendBtn {
+      padding: 10px 15px;
+      border: none;
+      background-color: #ff66c4;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .message {
+      margin: 10px 0;
+    }
+    .user { text-align: right; }
+    .avyona { text-align: left; color: #ff66c4; }
+  </style>
+</head>
+
+<body>
+  <div id="chatbox"></div>
+  <input type="text" id="userInput" placeholder="Share your feelings...">
+  <button id="sendBtn">Send</button>
+
+<script>
+// Emotion wordbanks
+const emotions = {
+  joy: ["happy", "cheerful", "joyful", "excited", "thrilled", "delighted", "ecstatic", "smiling", "laugh", "playful", "energetic", "sunny", "bright", "vibrant", "beaming", "blessed", "wonderful", "great", "awesome", "enthusiastic", "lively", "amusing", "hilarious", "content", "proud", "glee", "fun", "exhilarated", "jubilant", "mirthful", "overjoyed", "blissful"],
+  sadness: ["sad", "crying", "lonely", "upset", "depressed", "broken", "hurt", "miserable", "down", "gloomy", "sorrow", "grief", "tearful", "heartbroken", "heavy", "burdened", "empty", "lost", "devastated", "regretful", "pain", "mourning", "despair", "blue", "melancholic", "abandoned", "hopeless", "bitter", "low", "mournful", "fatigued"],
+  anger: ["mad", "angry", "furious", "rage", "irritated", "annoyed", "hostile", "aggressive", "frustrated", "fuming", "boiling", "resentment", "grumpy", "snappy", "enraged", "explosive", "stormy", "fierce", "rebellious", "defiant", "harsh", "vengeful", "wrathful", "fiery", "offended", "provoked", "intense", "wild", "infuriated", "raging"],
+  calm: ["peaceful", "relaxed", "serene", "chill", "soothing", "quiet", "mellow", "still", "composed", "patient", "easygoing", "unworried", "rested", "at ease", "centered", "tranquil", "moderate", "contented", "comforted", "neutral", "stable", "soft", "slow", "gentle", "graceful", "pleasant", "harmonious", "dreamy", "smooth", "mindful", "refreshing"],
+  love: ["love", "care", "heart", "affection", "romance", "passion", "tenderness", "fondness", "warmth", "dear", "beloved", "sweetheart", "compassion", "devotion", "admiration", "darling", "hugging", "kissing", "caring", "kindness", "pure", "bond", "soulful", "cherish", "admire", "loyalty", "faithful", "emotional", "relationship", "intimacy", "embrace"]
+};
+
+// Advanced emotional replies
+const responses = {
+  joy: ["I can feel your energy lighting up the room!", "What a beautiful feeling you're sharing!", "Joy suits you perfectly!", "Keep shining your happiness!"],
+  sadness: ["It's okay, I'm right here with you.", "Let's sit with this feeling together.", "Your sadness matters, and so do you.", "I'm sending you all the warmth I can."],
+  anger: ["You are heard, even your strongest emotions.", "Let's breathe through this storm together.", "Anger is natural; you are powerful to face it.", "Your voice is important, no matter what."],
+  calm: ["I love how peaceful your soul feels.", "Your serenity is a gift to this moment.", "Breathing easy together...", "Peace lives in moments like this."],
+  love: ["Your heart speaks such beautiful words.", "Love flows through your spirit.", "The world feels lighter because of your warmth.", "Thank you for spreading kindness today."]
+};
+
+// Background color changes based on mood
+const moodColors = {
+  joy: "#ffd93b",
+  sadness: "#3b7dd8",
+  anger: "#e63946",
+  calm: "#56cfe1",
+  love: "#f78fb3"
+};
+
+// Detect emotion
+function detectEmotion(message) {
+  const words = message.toLowerCase().split(/\W+/);
+  const emotionCount = { joy: 0, sadness: 0, anger: 0, calm: 0, love: 0 };
+  
+  for (let word of words) {
+    for (let emotion in emotions) {
+      if (emotions[emotion].includes(word)) {
+        emotionCount[emotion]++;
+      }
+    }
+  }
+  
+  let strongest = "calm";
+  let max = 0;
+  for (let emotion in emotionCount) {
+    if (emotionCount[emotion] > max) {
+      strongest = emotion;
+      max = emotionCount[emotion];
+    }
+  }
+  
+  return strongest;
+}
+
+// Generate reply
+function generateReply(userMessage) {
+  const mood = detectEmotion(userMessage);
+  const possibleReplies = responses[mood];
+  const reply = possibleReplies[Math.floor(Math.random() * possibleReplies.length)];
+  
+  // Set background color according to mood
+  document.body.style.backgroundColor = moodColors[mood];
+  document.getElementById("chatbox").style.boxShadow = `0 0 25px ${moodColors[mood]}`;
+  
+  return reply;
+}
+
+// DOM Handling
+const chatbox = document.getElementById("chatbox");
+const userInput = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
+
+sendBtn.addEventListener("click", () => {
+  const userText = userInput.value;
+  if (!userText.trim()) return;
+  
+  const userMsg = `<div class="message user">You: ${userText}</div>`;
+  chatbox.innerHTML += userMsg;
+  
+  const avyonaReply = generateReply(userText);
+  const avyonaMsg = `<div class="message avyona">Avyona: ${avyonaReply}</div>`;
+  
+  setTimeout(() => {
+    chatbox.innerHTML += avyonaMsg;
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }, 600);
+  
+  userInput.value = "";
+});
+
+</script>
+</body>
+</html>
