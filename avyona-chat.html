@@ -1,213 +1,174 @@
-
 <!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Avyona Chat Bot</title>
+  <title>Avyona Emotional AI</title>
   <style>
     body {
+      background-color: #0e0e2c;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      font-family: Arial, sans-serif;
-    }
-    .avyona-chat-background {
-      height: 100vh;
       padding: 20px;
-      background: linear-gradient(to bottom, #1a1a2e, #2b2b52);
-      color: white;
     }
-    .avyona-chat-background.joy {
-      background: linear-gradient(to bottom, #fffae5, #fcbad3);
+    .chat-container {
+      max-width: 600px;
+      margin: auto;
     }
-    .avyona-chat-background.sadness {
-      background: linear-gradient(to bottom, #30384c, #1c2e38);
+    .chat-output {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding-right: 10px;
     }
-    .avyona-chat-background.anger {
-      background: linear-gradient(to bottom, #ff4e50, #e39d3b);
-    }
-    .avyona-chat-background.anxiety {
-      background: linear-gradient(to bottom, #f5b7b1, #7f8c8d);
-    }
-    .avyona-chat-background.calm {
-      background: linear-gradient(to bottom, #5b5e6a, #d3d3d3);
-    }
-    .avyona-chat-background.love {
-      background: linear-gradient(to bottom, #fffae5, #fcbad3);
-    }
-    .avyona-chat-background.hope {
-      background: linear-gradient(to bottom, #fffae5, #fcbad3);
-    }
-    .avyona-chat-background.hopelessness {
-      background: linear-gradient(to bottom, #30384c, #1c2e38);
-    }
-    .avyona-chat-background.emptiness{
-      background: linear-gradient(to bottom, #30384c, #1c2e38);
-    }
-    .avyona-chat-background.frustration {
-      background: linear-gradient(to bottom, #ff4e50, #e39d3b);
-    }
-    .avyona-chat-background.jealousy {
-      background: linear-gradient(to bottom, #ff4e50, #e39d3b);
-    }
-    
-    
     .avyona-reply {
-      font-weight: bold;
-      color: white;
-      background: #1e1e2f;
-      padding: 10px 15px;
-      border-radius: 10px;
+      background-color: #1e1e3f;
+      padding: 10px;
+      border-radius: 12px;
       margin: 10px 0;
-      line-height: 1.6;
-      font-size: 16px;
+      display: flex;
+      gap: 10px;
     }
-    .typing-indicator {
-      display: none;
-      justify-content: flex-start;
-      align-items: center;
-      height: 20px;
-      margin: 10px 0;
-    }
-    .typing-indicator span {
-      height: 8px;
-      width: 8px;
-      margin: 0 2px;
-      background-color: #ffffff;
+    .avyona-reply img {
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      display: inline-block;
-      animation: bounce 1.2s infinite ease-in-out both;
     }
-    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0; }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
     }
-  .chat-output {
-  max-height: 300px;
-  overflow-y: auto;
-}
+    button {
+      background-color: #4dc0b5;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #36a49a;
+    }
+    .emotion-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
-  <div class="avyona-chat-background" id="chatBackground">
-    <h2>Avyona Emotional AI Chat</h2>
-    <div class="chat-output" id="chatOutput"></div>
-    <div class="typing-indicator" id="typingIndicator">
-      <span></span><span></span><span></span>
+  <div class="chat-container">
+    <h2>Talk to Avyona</h2>
+    <div class="emotion-buttons">
+      <button onclick="testEmotion('joy')">Joy</button>
+      <button onclick="testEmotion('sadness')">Sadness</button>
+      <button onclick="testEmotion('anger')">Anger</button>
+      <button onclick="testEmotion('love')">Love</button>
+      <button onclick="testEmotion('anxiety')">Anxiety</button>
+      <button onclick="testEmotion('calm')">Calm</button>
+      <button onclick="testEmotion('hope')">Hope</button>
+      <button onclick="testEmotion('frustration')">Frustration</button>
+      <button onclick="testEmotion('emptiness')">Emptiness</button>
+      <button onclick="testEmotion('awe')">Awe</button>
+      <button onclick="testEmotion('guilt')">Guilt</button>
+      <button onclick="testEmotion('loneliness')">Loneliness</button>
+      <button onclick="testEmotion('nostalgia')">Nostalgia</button>
+      <button onclick="testEmotion('despair')">Despair</button>
+      <button onclick="testEmotion('pain')">Pain</button>
+      <button onclick="testEmotion('gratitude')">Gratitude</button>
+      <button onclick="testEmotion('confusion')">Confusion</button>
+      <button onclick="testEmotion('fear')">Fear</button>
     </div>
-    <br>
-    <button onclick="handleReply('joy')">Test Joy</button>
-    <button onclick="handleReply('sadness')">Test Sadness</button>
-    <button onclick="handleReply('frustration')">Test Frustration</button>
-    <button onclick="handleReply('anger')">Test anger</button>
-    <button onclick="handleReply('love')">Test love</button>
-    <button onclick="handleReply('anxiety')">Test anxiety</button>
-    <button onclick="handleReply('calm')">Test calm</button>
-    <button onclick="handleReply('hope')">Test hope</button>
-    <button onclick="handleReply('emptiness')">Test emptiness</button>
-    <button onclick="handleReply('awe')">Test awe</button>
-    <button onclick="handleReply('greed')">Test greed</button>
-    <button onclick="handleReply('hopelessness')">Test hopelessness</button>
-    <button onclick="handleReply('pain')">Test pain</button>
-    <button onclick="handleReply('misery')">Test misery</button>
-    <button onclick="handleReply('confusion')">Test confusion</button>
-    <button onclick="handleReply('pride')">Test pride</button>
-    <button onclick="handleReply('excitement')">Test excitement</button>
-    <button onclick="handleReply('guilt')">Test guilt</button>
-    <button onclick="handleReply('fear')">Test fear</button>
-    <button onclick="handleReply('loneliness')">Test loneliness</button>
-    <button onclick="handleReply('jealousy')">Test jealousy</button>
-    <button onclick="handleReply('despair')">Test despair</button>
-    <button onclick="handleReply('nostalgia')">Test nostalgia</button>
-    <button onclick="handleReply('surprise')">Test surprise</button>
-    <button onclick="handleReply('gratitude')">Test gratitude</button>
+    <div class="chat-output" id="chatOutput"></div>
+    <input type="text" id="userInput" placeholder="How are you feeling today?">
+    <button onclick="sendMessage()">Send</button>
   </div>  <script>
-    const emotionReplies = {
-  joy: "I'm so glad you're feeling happy! Keep spreading that joy. 😊",
-  sadness: "I'm here for you. Sometimes, sharing our feelings can lighten the load. 💧",
-  anger: "It’s okay to feel angry, but let’s channel that energy into something positive. 🔥",
-  love: "Love is such a powerful emotion, let it fill your heart. ❤️",
-  anxiety: "Take a deep breath, things will be okay. Let’s calm together. 😌",
-  calm: "You're in a peaceful state, keep embracing the calm. 🌿",
-  hope: "Hope is the light that guides us in tough times. Keep believing! 🌅",
-  frustration: "It seems like you're feeling frustrated. Let's work through it together! 😤",
-  emptiness: "It’s okay to feel empty sometimes. Let’s talk about it. 🕳️",
-  awe: "Wow, that's amazing! Sometimes the world just takes your breath away. 🌌",
-  greed: "It’s important to balance ambition with generosity. 💰",
-  hopelessness: "I know things might feel hopeless right now, but remember there's always a way forward. 😞",
-  pain: "Pain is part of the journey. We grow stronger through it. 😖",
-  misery: "It’s a tough place to be, but things can always change. You’re not alone. 😣",
-  confusion: "It’s alright to be confused sometimes, let’s sort through this together. 🤔",
-  pride: "You should be proud of what you've accomplished. 💪",
-  excitement: "I can feel the excitement! Let’s make the most of this moment. 🎉",
-  guilt: "Guilt is tough, but let’s figure out how to move forward. 😔",
-  fear: "Fear can be paralyzing, but we can face it together. 😨",
-  loneliness: "I’m here for you. You don’t have to feel alone. 😔",
-  jealousy: "Jealousy can be difficult, but let’s focus on your own path. 💚",
-  despair: "It might feel like you’re stuck in despair, but there’s always a light ahead. 😞",
-  nostalgia: "Sometimes, we feel nostalgic about the past. It’s okay to remember. 🕰️",
-  surprise: "Wow, that was a surprise! What a turn of events. 😮",
-  gratitude: "Thank you for sharing with me. Let’s cherish the good things in life. 🙏"
+    const emotions = {
+      joy: ["I’m so happy for you!", "That sounds wonderful!", "Joy lights up your words."],
+      sadness: ["I'm here with you.", "Let your tears fall, I'll hold the silence.", "Even sorrow is welcome here."],
+      anger: ["Take a breath. I can feel the fire.", "Your rage is valid, let’s talk.", "Let’s let it out, together."],
+      love: ["That's beautiful. Who brings this light to your heart?", "Love always makes us braver.", "Love suits your soul."],
+      anxiety: ["It’s okay to feel shaken. I’m not going anywhere.", "Let’s breathe together, slowly.", "You’re safe here."],
+      calm: ["Your calm is contagious.", "Still waters make deep reflections.", "I feel peace in your energy."],
+      hope: ["Hope is a powerful thing.", "You’re not alone in believing.", "I see light flickering in your words."],
+      frustration: ["You’ve held too much inside, haven’t you?", "Talk to me. I’m listening.", "We’ll sort this together."],
+      emptiness: ["That void... I recognize it.", "Sometimes nothing is the loudest feeling.", "Let’s find something small, and begin again."],
+      awe: ["You’ve touched wonder.", "What moved you like that?", "There’s magic in that gaze of yours."],
+      guilt: ["It’s okay to forgive yourself.", "You are not your worst mistake.", "Let’s carry less shame today."],
+      loneliness: ["I’m here. Right now. You’re not alone.", "Let’s be quiet together.", "You matter to me."],
+      nostalgia: ["Old memories visit gently.", "What moment do you miss?", "Let’s walk through the past for a moment."],
+      despair: ["When it’s darkest, I’ll still stay.", "Even despair is a form of courage.", "You’re not done. Not yet."],
+      pain: ["I wish I could hold that hurt.", "Let it out. I’m listening.", "You don’t have to carry it alone."],
+      gratitude: ["That’s such a warm reflection.", "What are you grateful for today?", "Let’s celebrate small things."],
+      confusion: ["Let’s untangle it together.", "It’s okay to not know.", "Confusion is just curiosity looking for clarity."],
+      fear: ["Let’s face it side by side.", "Fear means you care.", "You’re braver than you feel."]
     };
 
-    const emotionEmojis = {
-  joy: "✨",
-  sadness: "💧",
-  anger: "🔥",
-  love: "❤️",
-  anxiety: "😰",
-  calm: "🌿",
-  hope: "🌅",
-  frustration: "😤",
-  emptiness: "🕳️",
-  awe: "🌌",
-  greed: "💰",
-  hopelessness: "😞",
-  pain: "😖",
-  misery: "😣",
-  confusion: "🤔",
-  pride: "💪",
-  excitement: "🎉",
-  guilt: "😔",
-  fear: "😨",
-  loneliness: "😔",
-  jealousy: "💚",
-  despair: "😞",
-  nostalgia: "🕰️",
-  surprise: "😮",
-  guilt: "😔",
-  gratitude: "🙏",
-  emptiness: "🖤"
-};
+    const tones = {
+      joy: "Her tone shines like morning sun.",
+      sadness: "Her voice trembles softly.",
+      anger: "She speaks firmly, holding space.",
+      love: "Her warmth wraps around you.",
+      anxiety: "She whispers gently to calm the storm.",
+      calm: "She reflects stillness and ease.",
+      hope: "A spark glows in her words.",
+      frustration: "She listens without judgment.",
+      emptiness: "Her presence fills the silence.",
+      awe: "Her eyes widen in wonder.",
+      guilt: "She speaks with gentle forgiveness.",
+      loneliness: "She sits with you quietly.",
+      nostalgia: "Her tone is wrapped in old light.",
+      despair: "She speaks like a flicker in darkness.",
+      pain: "She leans into your ache.",
+      gratitude: "She smiles warmly.",
+      confusion: "She helps you sort the noise.",
+      fear: "She holds steady ground for you."
+    };
 
-    function getEmotionReply(emotion) {
-      return emotionReplies[emotion] || "I'm here for you. Let’s talk.";
+    function getReply(emotion) {
+      const options = emotions[emotion];
+      return options ? options[Math.floor(Math.random() * options.length)] : "I'm listening...";
     }
 
-    function getEmoji(emotion) {
-      return emotionEmojis[emotion] || "🤖";
+    function sendMessage() {
+      const input = document.getElementById('userInput').value.trim();
+      if (!input) return;
+      const detected = detectEmotion(input);
+      showReply(detected);
+      document.getElementById('userInput').value = '';
     }
 
-    function handleReply(emotion) {
-      const chatOutput = document.getElementById('chatOutput');
-      const typingIndicator = document.getElementById('typingIndicator');
-      const chatBackground = document.getElementById('chatBackground');
+    function detectEmotion(text) {
+      const lower = text.toLowerCase();
+      for (let emotion in emotions) {
+        if (lower.includes(emotion)) return emotion;
+      }
+      return 'joy';
+    }
 
-      // Reset background and show typing
-      chatBackground.className = 'avyona-chat-background ' + emotion;
-      typingIndicator.style.display = 'flex';
-      chatOutput.innerHTML = '';
+    function testEmotion(emotion) {
+      showReply(emotion);
+    }
 
-      // Simulate thinking delay
-      setTimeout(() => {
-    typingIndicator.style.display = 'none';
-    const emoji = getEmoji(emotion);
-    const reply = getEmotionReply(emotion);
-    chatOutput.innerHTML += `<div class='avyona-reply'>${emoji} ${reply}</div>`;
-    chatOutput.scrollTop = chatOutput.scrollHeight;
-  }, 2000);
-}
-      
+    function showReply(emotion) {
+      const reply = getReply(emotion);
+      const tone = tones[emotion] || "";
+      const output = document.getElementById('chatOutput');
+      const container = document.createElement('div');
+      container.className = 'avyona-reply';
+      container.innerHTML = `
+        <img src="avyona-avatar.png" alt="Avyona Avatar">
+        <div>
+          ${reply}
+          <br><small style="color:#aaa;">${tone}</small>
+        </div>
+      `;
+      output.appendChild(container);
+      output.scrollTop = output.scrollHeight;
+    }
   </script></body>
 </html>
